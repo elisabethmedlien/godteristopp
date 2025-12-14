@@ -87,11 +87,6 @@ function App() {
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
 
-  const [customSkipDays, setCustomSkipDays] = useState<Set<number>>(() => {
-    const saved = localStorage.getItem("godteristopp-skipdays");
-    return saved ? new Set(JSON.parse(saved)) : new Set();
-  });
-
   // Save to localStorage whenever state changes
   useEffect(() => {
     localStorage.setItem(
@@ -100,25 +95,11 @@ function App() {
     );
   }, [flippedNotes]);
 
-  useEffect(() => {
-    localStorage.setItem(
-      "godteristopp-skipdays",
-      JSON.stringify(Array.from(customSkipDays))
-    );
-  }, [customSkipDays]);
+  const isSkipDay = (date: { id: number; fullDate: string }) =>
+    skipDayMap.has(date.fullDate);
 
-  const isSkipDay = (date: { id: number; fullDate: string }) => {
-    return skipDayMap.has(date.fullDate) || customSkipDays.has(date.id);
-  };
-
-  const getSkipDayInfo = (date: { id: number; fullDate: string }) => {
-    const predefined = skipDayMap.get(date.fullDate);
-    if (predefined) return predefined;
-    if (customSkipDays.has(date.id)) {
-      return { reason: "Unntaksdag", emoji: "🎉" };
-    }
-    return null;
-  };
+  const getSkipDayInfo = (date: { id: number; fullDate: string }) =>
+    skipDayMap.get(date.fullDate) || null;
 
   const handleFlip = (id: number, fullDate: string) => {
     // Skip days are auto-flipped, don't allow manual toggle
@@ -135,40 +116,8 @@ function App() {
     });
   };
 
-  const handleContextMenu = (
-    e: React.MouseEvent,
-    id: number,
-    fullDate: string
-  ) => {
-    e.preventDefault();
-    // Don't allow modifying predefined skip days
-    if (skipDayMap.has(fullDate)) return;
-
-    if (customSkipDays.has(id)) {
-      // Remove from skip days
-      setCustomSkipDays((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(id);
-        return newSet;
-      });
-    } else {
-      // Add as skip day
-      setCustomSkipDays((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(id);
-        return newSet;
-      });
-      // Also remove from flipped if it was flipped
-      setFlippedNotes((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(id);
-        return newSet;
-      });
-    }
-  };
-
   // Calculate progress excluding skip days
-  const totalSkipDays = predefinedSkipDays.length + customSkipDays.size;
+  const totalSkipDays = predefinedSkipDays.length;
   const effectiveDays = TOTAL_DAYS;
   const progress =
     effectiveDays > 0 ? (flippedNotes.size / effectiveDays) * 100 : 0;
@@ -218,16 +167,13 @@ function App() {
                   skipDay ? "skip-day" : ""
                 }`}
                 onClick={() => handleFlip(date.id, date.fullDate)}
-                onContextMenu={(e) =>
-                  handleContextMenu(e, date.id, date.fullDate)
-                }
                 style={
                   { "--note-color": getColor(date.id) } as React.CSSProperties
                 }
                 title={
                   skipDay
                     ? `${skipInfo?.emoji} ${skipInfo?.reason}`
-                    : "Klikk for å markere som godterifri. Høyreklikk for unntaksdag."
+                    : "Klikk for å markere som godterifri."
                 }
               >
                 <div className="note">
@@ -256,10 +202,6 @@ function App() {
           })}
         </div>
       </main>
-
-      <footer className="footer">
-        <p>Venstreklikk = godterifri dag ✓ | Høyreklikk = unntaksdag 🎉</p>
-      </footer>
     </div>
   );
 }

@@ -17,7 +17,7 @@ const routes = [
     props: {
       name: "Kine",
       startDate: "2026-01-01",
-      endDate: "2026-04-10",
+      endDate: "2026-04-11",
       predefinedSkipDays: [
         { date: "2026-02-07", reason: "Vilde sin bursdag", emoji: "🎂" },
       ],
@@ -336,12 +336,14 @@ function App() {
   );
 
   return (
-    <Calendar
-      name={route.props.name}
-      startDate={route.props.startDate}
-      totalDays={totalDays}
-      predefinedSkipDays={route.props.predefinedSkipDays}
-    />
+    <div className="app">
+      <Calendar
+        name={route.props.name}
+        startDate={route.props.startDate}
+        totalDays={totalDays}
+        predefinedSkipDays={route.props.predefinedSkipDays}
+      />
+    </div>
   );
 }
 

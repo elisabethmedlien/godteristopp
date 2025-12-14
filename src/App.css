@@ -755,6 +755,11 @@
   transform: translateY(-2px);
 }
 
+.save-button {
+  margin-left: auto;
+  display: block;
+}
+
 @keyframes popIn {
   from {
     transform: scale(0.9);

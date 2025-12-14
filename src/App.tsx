@@ -305,7 +305,10 @@ function RootCalendar() {
               </button>
             </section>
           </form>
-          <button className="celebration-button" onClick={handleSave}>
+          <button
+            className="celebration-button save-button"
+            onClick={handleSave}
+          >
             Lagre og lukk
           </button>
         </div>

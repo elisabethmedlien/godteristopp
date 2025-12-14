@@ -1,25 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 
-// Motivational messages for the back of flipped notes
-const motivationalMessages = [
-  "Du klarte det! 💪",
-  "En dag nærmere målet! 🎯",
-  "Sterk vilje! 🌟",
-  "Fantastisk! ⭐",
-  "Keep going! 🚀",
-  "Du er rå! 🔥",
-  "Imponerende! 👏",
-  "Viljestyrke! 💎",
-  "Mestrer dette! 🏆",
-  "Så bra! 🌈",
-  "Champion! 🥇",
-  "Heia deg! 🎉",
-  "Nailed it! ✨",
-  "Respekt! 🙌",
-  "Legendarisk! 👑",
-];
-
 const TOTAL_GOAL_DAYS = 100; // Total sticky notes you must flip
 
 // Pre-defined skip days with reasons
@@ -124,8 +105,6 @@ function App() {
   const progress =
     effectiveDays > 0 ? (flippedNotes.size / effectiveDays) * 100 : 0;
 
-  const getMessage = (id: number) =>
-    motivationalMessages[id % motivationalMessages.length];
   const getColor = (id: number) => noteColors[id % noteColors.length];
 
   const rangeLabel = `${formatLongDate(dates[0].fullDate)} → ${formatLongDate(
@@ -193,7 +172,6 @@ function App() {
                     ) : (
                       <>
                         <span className="checkmark">✓</span>
-                        <span className="message">{getMessage(date.id)}</span>
                       </>
                     )}
                   </div>

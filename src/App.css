@@ -7,7 +7,7 @@
 
 .app {
   min-height: 100vh;
-
+  align-content: center;
   padding: 20px;
   font-family: 'Nunito', sans-serif;
 }

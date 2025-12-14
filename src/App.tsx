@@ -20,6 +20,8 @@ const motivationalMessages = [
   "Legendarisk! 👑",
 ];
 
+const TOTAL_DAYS = 100; // Total sticky notes for the challenge
+
 // Pre-defined skip days with reasons
 interface SkipDay {
   date: string; // YYYY-MM-DD format
@@ -31,12 +33,18 @@ const predefinedSkipDays: SkipDay[] = [
   { date: "2026-02-07", reason: "Vilde sin bursdag", emoji: "🎂" },
 ];
 
+const formatLongDate = (dateStr: string) =>
+  new Date(dateStr).toLocaleDateString("no-NO", {
+    day: "numeric",
+    month: "long",
+  });
+
 // Generate dates from Jan 1 to Mar 31, 2026
 const generateDates = () => {
   const dates = [];
   const startDate = new Date(2026, 0, 1); // January 1, 2026
 
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < TOTAL_DAYS; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     // Format date as YYYY-MM-DD without timezone issues
@@ -161,7 +169,7 @@ function App() {
 
   // Calculate progress excluding skip days
   const totalSkipDays = predefinedSkipDays.length + customSkipDays.size;
-  const effectiveDays = 90 - totalSkipDays;
+  const effectiveDays = TOTAL_DAYS;
   const progress =
     effectiveDays > 0 ? (flippedNotes.size / effectiveDays) * 100 : 0;
 
@@ -169,11 +177,15 @@ function App() {
     motivationalMessages[id % motivationalMessages.length];
   const getColor = (id: number) => noteColors[id % noteColors.length];
 
+  const rangeLabel = `${formatLongDate(dates[0].fullDate)} → ${formatLongDate(
+    dates[dates.length - 1].fullDate
+  )}`;
+
   return (
     <div className="app">
       <header className="header">
         <h1>🍬 Kines kalender for godteristopp 2026 🍬</h1>
-        <p className="subtitle">1. januar → 1. april</p>
+        <p className="subtitle">{rangeLabel}</p>
         <div className="progress-container">
           <div
             className="progress-bar"

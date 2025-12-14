@@ -14,7 +14,7 @@ const formatLongDate = (dateStr: string) =>
   });
 
 // Generate dates from Jan 1 to Mar 31, 2026
-const generateDates = (totalNotes: number) => {
+export const generateDates = (totalNotes: number) => {
   const dates = [];
   const startDate = new Date(2026, 0, 1); // January 1, 2026
 

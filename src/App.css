@@ -340,6 +340,157 @@
   display: inline-block;
 }
 
+.open-builder-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: #2d7a50;
+  color: white;
+  font-weight: 700;
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.builder-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 25;
+}
+
+.builder-modal.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.builder-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 30px;
+  max-width: 640px;
+  width: min(90vw, 640px);
+  box-shadow: 0 25px 45px rgba(0, 0, 0, 0.35);
+}
+
+.builder-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.builder-card header button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: #ff7675;
+  cursor: pointer;
+}
+
+.root-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.root-form label {
+  font-weight: 600;
+  color: #464e58;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.root-form input,
+.root-form textarea {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 10px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.root-form input:focus,
+.root-form textarea:focus {
+  outline: none;
+  border-color: #00b894;
+}
+
+.root-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-hint {
+  font-size: 0.85rem;
+  color: #636e72;
+  margin-top: -8px;
+}
+
+.skip-rows {
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skip-row-header,
+.skip-row {
+  display: grid;
+  grid-template-columns: 2fr 3fr 1fr 40px;
+  gap: 10px;
+  align-items: center;
+}
+
+.skip-row-header {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #636e72;
+}
+
+.skip-row select,
+.skip-row input {
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+}
+
+.skip-row input {
+  width: 100%;
+}
+
+.remove-skip {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #ff7675;
+  cursor: pointer;
+}
+
+.add-skip {
+  align-self: flex-start;
+  background: none;
+  border: 1px dashed rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #2d7a50;
+}
 .root-config {
   max-width: 640px;
   margin: 0 auto 30px;

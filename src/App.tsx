@@ -110,6 +110,14 @@ function App() {
   const rangeLabel = `${formatLongDate(dates[0].fullDate)} → ${formatLongDate(
     dates[dates.length - 1].fullDate
   )}`;
+  const goalCompleted = flippedNotes.size >= TOTAL_GOAL_DAYS;
+  const [showCelebration, setShowCelebration] = useState(false);
+
+  useEffect(() => {
+    if (goalCompleted) {
+      setShowCelebration(true);
+    }
+  }, [goalCompleted]);
 
   return (
     <div className="app">
@@ -130,6 +138,11 @@ function App() {
           <p className="skip-info">
             🎉 {totalSkipDays} unntaksdag{totalSkipDays > 1 ? "er" : ""} (teller
             ikke)
+          </p>
+        )}
+        {goalCompleted && (
+          <p className="celebration-banner">
+            Gratulerer! Du har fullført alle {TOTAL_GOAL_DAYS} dager 🎉
           </p>
         )}
       </header>
@@ -182,6 +195,23 @@ function App() {
           })}
         </div>
       </main>
+      <div
+        className={`celebration-modal ${showCelebration ? "visible" : ""}`}
+        role="dialog"
+        aria-live="polite"
+        aria-modal="true"
+      >
+        <div className="celebration-card">
+          <h2>Gratulerer!</h2>
+          <p>Du har fullført alle {TOTAL_GOAL_DAYS} dager! 🎉</p>
+          <button
+            onClick={() => setShowCelebration(false)}
+            className="celebration-button"
+          >
+            hurra!
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

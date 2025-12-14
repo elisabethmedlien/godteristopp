@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import Calendar, { SkipDay, generateDates } from "./Calendar/Calendar";
 
@@ -7,7 +7,8 @@ const routes = [
     path: "/elisabeth",
     props: {
       name: "Elisabeth",
-      totalGoalDays: 90,
+      startDate: "2026-01-01",
+      endDate: "2026-04-01",
       predefinedSkipDays: [],
     },
   },
@@ -15,7 +16,8 @@ const routes = [
     path: "/kine",
     props: {
       name: "Kine",
-      totalGoalDays: 100,
+      startDate: "2026-01-01",
+      endDate: "2026-04-10",
       predefinedSkipDays: [
         { date: "2026-02-07", reason: "Vilde sin bursdag", emoji: "🎂" },
       ],
@@ -27,6 +29,30 @@ const normalizedPath = () =>
   window.location.pathname.replace(/\/+$/, "") || "/";
 
 const ROOT_CONFIG_KEY = "godteristopp-builder";
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
+
+const parseISODate = (value: string) => new Date(`${value}T00:00:00+00:00`);
+const formatISODate = (date: Date) => date.toISOString().split("T")[0];
+const addDaysToDate = (value: string, days: number) =>
+  formatISODate(new Date(parseISODate(value).getTime() + days * MS_PER_DAY));
+
+const dateDifferenceInclusive = (from: string, to: string) => {
+  const start = parseISODate(from).getTime();
+  const end = parseISODate(to).getTime();
+  if (isNaN(start) || isNaN(end)) return 1;
+  const diff = Math.floor((end - start) / MS_PER_DAY) + 1;
+  return diff > 0 ? diff : 1;
+};
+
+const DEFAULT_START_DATE = "2026-01-01";
+const DEFAULT_END_DATE = addDaysToDate(DEFAULT_START_DATE, 99);
+
+interface BuilderConfig {
+  name: string;
+  startDate: string;
+  endDate: string;
+  skipDays: SkipDay[];
+}
 
 const parseSkipDays = (input: string): SkipDay[] => {
   return input
@@ -44,16 +70,11 @@ const parseSkipDays = (input: string): SkipDay[] => {
 
 const emojiOptions = ["🎂", "🎉", "✨", "💪", "😍", "🍏"];
 
-interface BuilderConfig {
-  name: string;
-  goalDays: number;
-  skipDays: SkipDay[];
-}
-
 function RootCalendar() {
   const defaultConfig: BuilderConfig = {
     name: "Kine",
-    goalDays: 100,
+    startDate: DEFAULT_START_DATE,
+    endDate: DEFAULT_END_DATE,
     skipDays: parseSkipDays("2026-02-07|Vilde sin bursdag|🎂"),
   };
 
@@ -62,15 +83,13 @@ function RootCalendar() {
     if (!raw) return null;
     try {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed.skipDays)) {
-        return parsed;
-      }
-      if (parsed.skipInput) {
-        return {
-          name: parsed.name || defaultConfig.name,
-          goalDays: parsed.goalDays || defaultConfig.goalDays,
-          skipDays: parseSkipDays(parsed.skipInput),
-        };
+      if (
+        parsed &&
+        Array.isArray(parsed.skipDays) &&
+        parsed.startDate &&
+        parsed.endDate
+      ) {
+        return parsed as BuilderConfig;
       }
     } catch {
       return null;
@@ -90,16 +109,23 @@ function RootCalendar() {
     localStorage.setItem(ROOT_CONFIG_KEY, JSON.stringify(config));
   }, [config]);
 
-  const totalNotes = draft.goalDays + draft.skipDays.length + 2;
-  const dateOptions = useMemo(() => generateDates(totalNotes), [totalNotes]);
+  // Calculate total days from draft dates for dropdown options
+  const draftTotalDays = dateDifferenceInclusive(
+    draft.startDate,
+    draft.endDate
+  );
+  const dateOptions = useMemo(
+    () => generateDates(draftTotalDays, draft.startDate),
+    [draftTotalDays, draft.startDate]
+  );
 
   const handleDraftChange = (
-    field: "name" | "goalDays" | "skipDays",
-    value: string | number | SkipDay[]
+    field: keyof BuilderConfig,
+    value: string | SkipDay[]
   ) => {
-    setDraft((prev: BuilderConfig) => ({
+    setDraft((prev) => ({
       ...prev,
-      [field]: value as any,
+      [field]: value,
     }));
   };
 
@@ -132,9 +158,19 @@ function RootCalendar() {
   const usedDates = new Set(draft.skipDays.map((day) => day.date));
 
   const handleSave = () => {
-    setConfig(draft);
+    // Filter out skip days that are outside the new date range
+    const validSkipDays = draft.skipDays.filter(
+      (skip) => skip.date >= draft.startDate && skip.date <= draft.endDate
+    );
+    setConfig({ ...draft, skipDays: validSkipDays });
     setShowBuilder(false);
   };
+
+  // Calculate total days for calendar from config
+  const configTotalDays = dateDifferenceInclusive(
+    config.startDate,
+    config.endDate
+  );
 
   return (
     <div className="app">
@@ -150,7 +186,8 @@ function RootCalendar() {
 
       <Calendar
         name={config.name}
-        totalGoalDays={config.goalDays}
+        startDate={config.startDate}
+        totalDays={configTotalDays}
         predefinedSkipDays={config.skipDays}
       />
 
@@ -175,16 +212,26 @@ function RootCalendar() {
               />
             </label>
             <label>
-              Antall dager
+              Fra dato
               <input
-                type="number"
-                min={1}
-                value={draft.goalDays}
+                type="date"
+                value={draft.startDate}
                 onChange={(event) =>
-                  handleDraftChange("goalDays", Number(event.target.value) || 1)
+                  handleDraftChange("startDate", event.target.value)
                 }
               />
             </label>
+            <label>
+              Til dato
+              <input
+                type="date"
+                value={draft.endDate}
+                onChange={(event) =>
+                  handleDraftChange("endDate", event.target.value)
+                }
+              />
+            </label>
+            <p className="date-info">{draftTotalDays} dager totalt</p>
             <section className="skip-rows">
               <div className="skip-row-header">
                 <span>Dag</span>
@@ -271,10 +318,16 @@ function App() {
     return <RootCalendar />;
   }
 
+  const totalDays = dateDifferenceInclusive(
+    route.props.startDate,
+    route.props.endDate
+  );
+
   return (
     <Calendar
       name={route.props.name}
-      totalGoalDays={route.props.totalGoalDays}
+      startDate={route.props.startDate}
+      totalDays={totalDays}
       predefinedSkipDays={route.props.predefinedSkipDays}
     />
   );

@@ -438,6 +438,13 @@
   margin-top: -8px;
 }
 
+.date-info {
+  font-size: 0.9rem;
+  color: #00b894;
+  font-weight: 600;
+  margin: -4px 0 8px;
+}
+
 .skip-rows {
   margin-top: 18px;
   display: flex;

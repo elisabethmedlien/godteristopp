@@ -7,21 +7,21 @@ export interface SkipDay {
   emoji: string;
 }
 
+const parseISODate = (value: string) => new Date(`${value}T00:00:00+00:00`);
+
 const formatLongDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString("no-NO", {
     day: "numeric",
     month: "long",
   });
 
-// Generate dates from Jan 1 to Mar 31, 2026
-export const generateDates = (totalNotes: number) => {
+export const generateDates = (totalDays: number, startDate = "2026-01-01") => {
   const dates = [];
-  const startDate = new Date(2026, 0, 1); // January 1, 2026
+  const base = parseISODate(startDate);
 
-  for (let i = 0; i < totalNotes; i++) {
-    const date = new Date(startDate);
-    date.setDate(startDate.getDate() + i);
-    // Format date as YYYY-MM-DD without timezone issues
+  for (let i = 0; i < totalDays; i++) {
+    const date = new Date(base);
+    date.setDate(base.getDate() + i);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const day = String(date.getDate()).padStart(2, "0");
@@ -56,11 +56,13 @@ const skipDayMap = (predefinedSkipDays: SkipDay[]) =>
 
 function Calendar({
   name,
-  totalGoalDays,
+  startDate,
+  totalDays,
   predefinedSkipDays,
 }: {
   name: string;
-  totalGoalDays: number;
+  startDate: string;
+  totalDays: number;
   predefinedSkipDays: SkipDay[];
 }) {
   const [flippedNotes, setFlippedNotes] = useState<Set<number>>(() => {
@@ -68,8 +70,7 @@ function Calendar({
     return saved ? new Set(JSON.parse(saved)) : new Set();
   });
 
-  const totalNotes = totalGoalDays + predefinedSkipDays.length;
-  const dates = generateDates(totalNotes);
+  const dates = generateDates(totalDays, startDate);
 
   // Save to localStorage whenever state changes
   useEffect(() => {
@@ -102,16 +103,19 @@ function Calendar({
 
   // Calculate progress excluding skip days
   const totalSkipDays = predefinedSkipDays.length;
-  const effectiveDays = totalGoalDays;
+  const effectiveDays = Math.max(totalDays - totalSkipDays, 0);
   const progress =
     effectiveDays > 0 ? (flippedNotes.size / effectiveDays) * 100 : 0;
 
   const getColor = (id: number) => noteColors[id % noteColors.length];
 
-  const rangeLabel = `${formatLongDate(dates[0].fullDate)} → ${formatLongDate(
-    dates[dates.length - 1].fullDate
-  )}`;
-  const goalCompleted = flippedNotes.size >= totalGoalDays;
+  const rangeLabel =
+    dates.length > 0
+      ? `${formatLongDate(dates[0].fullDate)} → ${formatLongDate(
+          dates[dates.length - 1].fullDate
+        )}`
+      : "";
+  const goalCompleted = flippedNotes.size >= effectiveDays && effectiveDays > 0;
   const [showCelebration, setShowCelebration] = useState(false);
 
   useEffect(() => {
@@ -143,7 +147,7 @@ function Calendar({
         )}
         {goalCompleted && (
           <p className="celebration-banner">
-            Gratulerer! Du har fullført alle {totalGoalDays} dager 🎉
+            Gratulerer! Du har fullført alle {effectiveDays} dager 🎉
           </p>
         )}
       </header>
@@ -204,7 +208,7 @@ function Calendar({
       >
         <div className="celebration-card">
           <h2>Gratulerer, {name}!</h2>
-          <p>Du har fullført alle {totalGoalDays} dager! 🎉</p>
+          <p>Du har fullført alle {effectiveDays} dager! 🎉</p>
           <button
             onClick={() => setShowCelebration(false)}
             className="celebration-button"

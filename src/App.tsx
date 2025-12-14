@@ -20,7 +20,7 @@ const motivationalMessages = [
   "Legendarisk! 👑",
 ];
 
-const TOTAL_DAYS = 100; // Total sticky notes for the challenge
+const TOTAL_GOAL_DAYS = 100; // Total sticky notes you must flip
 
 // Pre-defined skip days with reasons
 interface SkipDay {
@@ -33,6 +33,8 @@ const predefinedSkipDays: SkipDay[] = [
   { date: "2026-02-07", reason: "Vilde sin bursdag", emoji: "🎂" },
 ];
 
+const TOTAL_NOTES = TOTAL_GOAL_DAYS + predefinedSkipDays.length;
+
 const formatLongDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString("no-NO", {
     day: "numeric",
@@ -44,7 +46,7 @@ const generateDates = () => {
   const dates = [];
   const startDate = new Date(2026, 0, 1); // January 1, 2026
 
-  for (let i = 0; i < TOTAL_DAYS; i++) {
+  for (let i = 0; i < TOTAL_NOTES; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     // Format date as YYYY-MM-DD without timezone issues
@@ -118,7 +120,7 @@ function App() {
 
   // Calculate progress excluding skip days
   const totalSkipDays = predefinedSkipDays.length;
-  const effectiveDays = TOTAL_DAYS;
+  const effectiveDays = TOTAL_GOAL_DAYS;
   const progress =
     effectiveDays > 0 ? (flippedNotes.size / effectiveDays) * 100 : 0;
 

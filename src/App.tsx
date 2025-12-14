@@ -172,7 +172,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🍬 Godteristopp 2025 🍬</h1>
+        <h1>🍬 Kines kalender for godteristopp 2025 🍬</h1>
         <p className="subtitle">1. januar → 1. april</p>
         <div className="progress-container">
           <div

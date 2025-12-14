@@ -86,9 +86,21 @@ function Calendar({
   const getSkipDayInfo = (date: { id: number; fullDate: string }) =>
     skipDayMap(predefinedSkipDays).get(date.fullDate) || null;
 
+  const todayStr = (() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  })();
+
+  const isFutureDate = (fullDate: string) => fullDate > todayStr;
+
   const handleFlip = (id: number, fullDate: string) => {
     // Skip days are auto-flipped, don't allow manual toggle
     if (isSkipDay({ id, fullDate })) return;
+    // Future dates cannot be flipped
+    if (isFutureDate(fullDate)) return;
 
     setFlippedNotes((prev) => {
       const newSet = new Set(prev);
@@ -157,6 +169,7 @@ function Calendar({
           {dates.map((date) => {
             const skipDay = isSkipDay(date);
             const skipInfo = getSkipDayInfo(date);
+            const future = isFutureDate(date.fullDate);
             const isFlipped = flippedNotes.has(date.id) || skipDay;
 
             return (
@@ -164,7 +177,7 @@ function Calendar({
                 key={date.id}
                 className={`note-container ${isFlipped ? "flipped" : ""} ${
                   skipDay ? "skip-day" : ""
-                }`}
+                } ${future ? "future" : ""}`}
                 onClick={() => handleFlip(date.id, date.fullDate)}
                 style={
                   { "--note-color": getColor(date.id) } as React.CSSProperties
@@ -172,6 +185,8 @@ function Calendar({
                 title={
                   skipDay
                     ? `${skipInfo?.emoji} ${skipInfo?.reason}`
+                    : future
+                    ? "Denne dagen har ikke skjedd ennå"
                     : "Klikk for å markere som godterifri."
                 }
               >

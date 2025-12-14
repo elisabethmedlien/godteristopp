@@ -139,7 +139,7 @@ function Calendar({
   return (
     <div className="calendar">
       <header className="header">
-        <h1>🍬 {name}'s godteristopp 2026 🍬</h1>
+        <h1>🍬 {name}'s godteristopp 🍬</h1>
         <p className="subtitle">{rangeLabel}</p>
         <div className="progress-container">
           <div

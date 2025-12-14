@@ -7,24 +7,7 @@
 html {
   scroll-behavior: smooth;
   min-height: 100%;
-  background-color: #885629;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 50px,
-      rgba(139, 90, 43, 0.03) 50px,
-      rgba(139, 90, 43, 0.03) 51px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 50px,
-      rgba(139, 90, 43, 0.03) 50px,
-      rgba(139, 90, 43, 0.03) 51px
-    ),
-    linear-gradient(135deg, #8B5A2B 0%, #A0522D 50%, #8B4513 100%);
-    background-repeat: no-repeat;
+  background-color: #464e58
 }
 
 body {
@@ -48,25 +31,6 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: #8B5A2B;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #654321;
-  border-radius: 6px;
-  border: 2px solid #8B5A2B;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #4a3219;
 }
 
 /* Selection color */

@@ -184,7 +184,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🍬 Kines kalender for godteristopp 2026 🍬</h1>
+        <h1>🍬 Kines godteristopp 2026 🍬</h1>
         <p className="subtitle">{rangeLabel}</p>
         <div className="progress-container">
           <div

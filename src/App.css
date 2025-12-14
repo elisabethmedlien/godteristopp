@@ -340,6 +340,61 @@
   display: inline-block;
 }
 
+.root-config {
+  max-width: 640px;
+  margin: 0 auto 30px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 24px;
+  border-radius: 18px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.root-config h1 {
+  font-family: "Caveat", cursive;
+  margin-bottom: 16px;
+}
+
+.root-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.root-form label {
+  font-weight: 600;
+  color: #464e58;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.root-form input,
+.root-form textarea {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  padding: 10px 14px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.root-form input:focus,
+.root-form textarea:focus {
+  outline: none;
+  border-color: #00b894;
+}
+
+.root-form textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-hint {
+  font-size: 0.85rem;
+  color: #636e72;
+  margin-top: -8px;
+}
 .celebration-banner {
   margin-top: 12px;
   font-size: 1rem;

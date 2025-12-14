@@ -28,13 +28,13 @@ interface SkipDay {
 }
 
 const predefinedSkipDays: SkipDay[] = [
-  { date: "2025-02-07", reason: "Vilde sin bursdag", emoji: "🎂" },
+  { date: "2026-02-07", reason: "Vilde sin bursdag", emoji: "🎂" },
 ];
 
-// Generate dates from Jan 1 to Mar 31, 2025
+// Generate dates from Jan 1 to Mar 31, 2026
 const generateDates = () => {
   const dates = [];
-  const startDate = new Date(2025, 0, 1); // January 1, 2025
+  const startDate = new Date(2026, 0, 1); // January 1, 2026
 
   for (let i = 0; i < 90; i++) {
     const date = new Date(startDate);
@@ -172,7 +172,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>🍬 Kines kalender for godteristopp 2025 🍬</h1>
+        <h1>🍬 Kines kalender for godteristopp 2026 🍬</h1>
         <p className="subtitle">1. januar → 1. april</p>
         <div className="progress-container">
           <div

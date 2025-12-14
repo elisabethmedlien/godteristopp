@@ -465,6 +465,15 @@
   text-transform: uppercase;
   letter-spacing: 0.4px;
   color: #636e72;
+  font-size: 0.75rem;
+}
+
+.skip-field {
+  display: contents;
+}
+
+.skip-label {
+  display: none;
 }
 
 .skip-row select,
@@ -498,6 +507,130 @@
   cursor: pointer;
   color: #2d7a50;
 }
+
+/* Mobile-friendly builder styles */
+@media (max-width: 600px) {
+  .builder-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .builder-card header h2 {
+    font-size: 1.1rem;
+  }
+
+  .skip-row-header {
+    display: none;
+  }
+
+  .skip-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    padding-top: 40px;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 14px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .skip-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .skip-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #636e72;
+  }
+
+  .skip-field-emoji {
+    width: fit-content;
+  }
+
+  .skip-row select,
+  .skip-row input {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 1rem;
+    border-radius: 12px;
+  }
+
+  .skip-row select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23636e72' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+  }
+
+  .skip-field-emoji select {
+    width: auto;
+    min-width: 70px;
+    font-size: 1.3rem;
+  }
+
+  .remove-skip {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 118, 117, 0.15);
+    border-radius: 50%;
+    font-size: 1.1rem;
+  }
+
+  .add-skip {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+    margin-top: 8px;
+    border-radius: 14px;
+    background: rgba(0, 184, 148, 0.1);
+    border-color: rgba(0, 184, 148, 0.4);
+    border-style: dashed;
+  }
+
+  .root-form label {
+    font-size: 0.9rem;
+  }
+
+  .root-form input[type="date"],
+  .root-form input[type="text"] {
+    padding: 12px 14px;
+    font-size: 1rem;
+  }
+
+  .date-info {
+    text-align: center;
+    font-size: 1rem;
+  }
+
+  .celebration-button {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    margin-top: 16px;
+  }
+
+  .skip-rows {
+    gap: 12px;
+  }
+}
+
 .root-config {
   max-width: 640px;
   margin: 0 auto 30px;

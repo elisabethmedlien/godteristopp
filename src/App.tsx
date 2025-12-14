@@ -151,7 +151,7 @@ function RootCalendar() {
     if (!available) return;
     handleDraftChange("skipDays", [
       ...draft.skipDays,
-      { date: available.fullDate, reason: "", emoji: "🎉" },
+      { date: available.fullDate, reason: "Vilde sin bursdag", emoji: "🎂" },
     ]);
   };
 
@@ -241,46 +241,55 @@ function RootCalendar() {
               </div>
               {draft.skipDays.map((skip, index) => (
                 <div key={`${skip.date}-${index}`} className="skip-row">
-                  <select
-                    value={skip.date}
-                    onChange={(event) =>
-                      updateSkipDay(index, { date: event.target.value })
-                    }
-                  >
-                    {dateOptions.map((date) => (
-                      <option
-                        key={date.fullDate}
-                        value={date.fullDate}
-                        disabled={
-                          usedDates.has(date.fullDate) &&
-                          date.fullDate !== skip.date
-                        }
-                      >
-                        {date.weekday} {date.day}. {date.month}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    type="text"
-                    maxLength={50}
-                    value={skip.reason}
-                    onChange={(event) =>
-                      updateSkipDay(index, { reason: event.target.value })
-                    }
-                    placeholder="Hvorfor?"
-                  />
-                  <select
-                    value={skip.emoji}
-                    onChange={(event) =>
-                      updateSkipDay(index, { emoji: event.target.value })
-                    }
-                  >
-                    {emojiOptions.map((emoji) => (
-                      <option key={emoji} value={emoji}>
-                        {emoji}
-                      </option>
-                    ))}
-                  </select>
+                  <label className="skip-field">
+                    <span className="skip-label">Dag</span>
+                    <select
+                      value={skip.date}
+                      onChange={(event) =>
+                        updateSkipDay(index, { date: event.target.value })
+                      }
+                    >
+                      {dateOptions.map((date) => (
+                        <option
+                          key={date.fullDate}
+                          value={date.fullDate}
+                          disabled={
+                            usedDates.has(date.fullDate) &&
+                            date.fullDate !== skip.date
+                          }
+                        >
+                          {date.weekday} {date.day}. {date.month}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="skip-field">
+                    <span className="skip-label">Årsak</span>
+                    <input
+                      type="text"
+                      maxLength={50}
+                      value={skip.reason}
+                      onChange={(event) =>
+                        updateSkipDay(index, { reason: event.target.value })
+                      }
+                      placeholder="Hvorfor?"
+                    />
+                  </label>
+                  <label className="skip-field skip-field-emoji">
+                    <span className="skip-label">Emoji</span>
+                    <select
+                      value={skip.emoji}
+                      onChange={(event) =>
+                        updateSkipDay(index, { emoji: event.target.value })
+                      }
+                    >
+                      {emojiOptions.map((emoji) => (
+                        <option key={emoji} value={emoji}>
+                          {emoji}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
                   <button
                     type="button"
                     className="remove-skip"

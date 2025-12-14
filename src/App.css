@@ -384,17 +384,7 @@
 }
 
 /* Context menu hint on hover */
-.note-container:not(.skip-day):not(.flipped)::after {
-  content: '🎉';
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  font-size: 0.7rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
+.note-container:not(.skip-day):not(.flipped)::after,
 .note-container:not(.skip-day):not(.flipped):hover::after {
-  opacity: 0.6;
+  display: none;
 }
